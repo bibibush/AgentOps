@@ -1,7 +1,7 @@
 from typing import Protocol
 
-class ResponseClientInterface(Protocol):
-    def create_response(self, model, input, stream, **kwargs):
+class OpenAIResponseAPIPort(Protocol):
+    def create_response(self, model, input, tools, stream, **kwargs):
         ...
     
     def output_response(self):
