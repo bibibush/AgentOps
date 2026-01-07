@@ -16,5 +16,5 @@ class OpenAIResponseAPIModel(BaseModel):
     model: str
     input: Union[List[Dict], str]
     instructions: Optional[str] = None
-    stream: Optional[bool] = False
+    stream: Optional[bool] = True
     tools: Optional[List[OpenAIToolsModel]] = None
