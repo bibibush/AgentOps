@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from infrastructure.openai_response.models import OpenAIResponseAPIModel
+from domain.openai_response.models import OpenAIResponseAPIModel
 
 router = APIRouter(prefix="/openai-response")
 
