@@ -8,7 +8,7 @@ class OpenAIResponseAPIRepository(OpenAIResponseAPIPort):
         self.response = None
 
     async def create_response(self, model, input, tools, stream, **kwargs):
-        response = self.client.responses.create(
+        response = await self.client.responses.create(
             model=model,
             input=input,
         )
