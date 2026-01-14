@@ -1,4 +1,4 @@
-from domain.openai_response.ports import OpenAIResponseAPIPort
+from infrastructure.openai_response.ports import OpenAIResponseAPIPort
 from openai import AsyncOpenAI
 
 class OpenAIResponseAPIRepository(OpenAIResponseAPIPort):
