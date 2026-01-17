@@ -9,7 +9,7 @@ class OpenAIResponseAPIRepository(OpenAIResponseAPIPort):
         self.stream = False
 
     async def create_response(self, model: str, input: Any, stream: bool, **kwargs) -> Any:
-        self.stream = stream
+        self.stream = stream if stream is not None else False
         
         response = await self.client.responses.create(
             model=model,
