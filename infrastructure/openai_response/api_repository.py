@@ -1,6 +1,9 @@
 from domain.openai_response.ports import OpenAIResponseAPIPort
 from openai import AsyncOpenAI
 from typing import Any, AsyncGenerator, Union, List, Dict
+import logging
+
+logger = logging.getLogger(__name__)
 
 class OpenAIResponseAPIRepository(OpenAIResponseAPIPort):
 
