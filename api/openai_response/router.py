@@ -8,8 +8,8 @@ router = APIRouter(prefix="/openai-response")
 
 @router.post("/text", response_model=ResponseAPI)
 async def get_openai_response(data: OpenAIResponseAPIModel):
-    openai_usecase = OpenAIUseCase(mode="text")
-    response = await openai_usecase.generate_response(
+    openai_usecase = OpenAIUseCase()
+    response = await openai_usecase.generate_text_response(
         ai_request=data
     )
 
@@ -21,8 +21,8 @@ async def get_openai_response(data: OpenAIResponseAPIModel):
 
 @router.post("/json", response_model=ResponseAPI)
 async def get_openai_response_json(data: OpenAIResponseAPIModel):
-    openai_usecase = OpenAIUseCase(mode="json")
-    response = await openai_usecase.generate_response(
+    openai_usecase = OpenAIUseCase()
+    response = await openai_usecase.generate_json_response(
         ai_request=data
     )
 
@@ -34,12 +34,12 @@ async def get_openai_response_json(data: OpenAIResponseAPIModel):
 
 @router.post("/sse")
 async def get_openai_response_sse(data: OpenAIResponseAPIModel):
-    openai_usecase = OpenAIUseCase(mode="stream")
-    
+    openai_usecase = OpenAIUseCase()
+
     async def event_generator():
-        async for chunk in openai_usecase.generate_response(ai_request=data):
+        async for chunk in openai_usecase.generate_stream_response(ai_request=data):
             yield f"data: {chunk}\n\n"
-    
+
     return StreamingResponse(
         event_generator(),
         media_type="text/event-stream"

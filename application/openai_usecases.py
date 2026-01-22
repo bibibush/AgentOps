@@ -1,51 +1,34 @@
 from domain.openai_response.ports import OpenAIResponseAPIPort
 from domain.openai_response.models import OpenAIResponseAPIModel
 from infrastructure.openai_response.api_repository import OpenAIResponseAPIRepository
-from typing import Literal
 
 class OpenAIUseCase:
     openai_repository: OpenAIResponseAPIPort
-    
-    def __init__(self, mode: Literal["text", "json", "stream"] = "stream"):
+
+    def __init__(self):
         self.openai_repository = OpenAIResponseAPIRepository()
-        self.mode = mode
-        self.switcher = {
-            "text": self.openai_repository.output_response_text,
-            "json": self.openai_repository.output_response_json,
-            "stream": self.openai_repository.output_response_stream,
-        }
-    
-    async def generate_response(
+
+    async def generate_text_response(
             self,
             ai_request: OpenAIResponseAPIModel,
         ):
-        if self.mode == "stream":
-            return self._generate_stream_response(ai_request)
-        else:
-            return await self._generate_response(ai_request)
-    
-    async def _generate_response(
-            self,
-            ai_request: OpenAIResponseAPIModel,
-        ):
-        
         request_data = ai_request.model_dump()
-        response = await self.openai_repository.create_response(
-            **request_data
-        )
+        response = await self.openai_repository.create_response(**request_data)
+        return await self.openai_repository.output_response_text(response)
 
-        return await self.switcher[self.mode](response)
-
-    async def _generate_stream_response(
+    async def generate_json_response(
             self,
             ai_request: OpenAIResponseAPIModel,
         ):
-        
         request_data = ai_request.model_dump()
-        response = await self.openai_repository.create_response(
-            **request_data
-        )
+        response = await self.openai_repository.create_response(**request_data)
+        return await self.openai_repository.output_response_json(response)
 
-        async for chunk in await self.switcher[self.mode](response):
+    async def generate_stream_response(
+            self,
+            ai_request: OpenAIResponseAPIModel,
+        ):
+        request_data = ai_request.model_dump()
+        response = await self.openai_repository.create_response(**request_data)
+        async for chunk in self.openai_repository.output_response_stream(response):
             yield chunk
-

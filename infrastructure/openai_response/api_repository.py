@@ -45,5 +45,6 @@ class OpenAIResponseAPIRepository(OpenAIResponseAPIPort):
         if response is None:
             raise ValueError("No response available. Please create a response first.")
         
-        async for chunk in response:
-            yield chunk
+        async for event in response:
+            if event.type == "response.output_text.delta":
+                yield event.delta
