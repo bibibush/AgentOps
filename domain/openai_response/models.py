@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List, Dict, Union, Optional, Any
+from domain.openai_response.prompt import system_prompt
 
 class OpenAIToolsParametersModel(BaseModel):
     type: str
@@ -15,6 +16,6 @@ class OpenAIToolsModel(BaseModel):
 class OpenAIResponseAPIModel(BaseModel):
     model: str
     input: Union[List[Dict], str]
-    instructions: Optional[str] = None
+    instructions: Optional[str] = system_prompt
     stream: Optional[bool] = False
     tools: Optional[List[OpenAIToolsModel]] = None
