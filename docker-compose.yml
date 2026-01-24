@@ -1,0 +1,10 @@
+version: "3"
+services:
+  agent_service:
+    build: .
+    container_name: agent_service_container
+    ports:
+      - "8000:8000"
+    restart: always
+    environment:
+      OPENAI_API_KEY: "${OPENAI_API_KEY}"
