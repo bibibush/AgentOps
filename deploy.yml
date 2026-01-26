@@ -21,7 +21,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            cd /path/to/your/project
+            cd AgentOps/
             git pull origin main
             echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > .env
             chmod 600 .env
