@@ -7,7 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
 RUN pip install --no-cache-dir uv
-RUN uv pip install . --system --no-cache
+RUN uv pip install -r pyproject.toml --system --no-cache
 
 EXPOSE 8000
 CMD ["python", "main.py"]
