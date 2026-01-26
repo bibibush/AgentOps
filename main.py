@@ -11,7 +11,11 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:1234", "http://127.0.0.1:1234"],
+    allow_origins=[
+        "http://localhost:1234",
+        "http://127.0.0.1:1234",
+        "https://d2lqi33nqmhm1k.cloudfront.net",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
