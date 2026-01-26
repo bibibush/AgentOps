@@ -15,6 +15,7 @@ app.add_middleware(
         "http://localhost:1234",
         "http://127.0.0.1:1234",
         "https://d2lqi33nqmhm1k.cloudfront.net",
+        "d17mvitdwy9d92.cloudfront.net"
     ],
     allow_credentials=True,
     allow_methods=["*"],
