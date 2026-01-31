@@ -31,7 +31,14 @@ jobs:
           port: 22
           script: |
             cd ~/AgentOps/
-            echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > .env
+            cat << EOF > .env
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
+            MYSQL_USER=${{ secrets.MYSQL_USER }}
+            MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}
+            MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
+            EOF
             chmod 600 .env
             docker compose up agent_service_container -d --build --force-recreate
             docker image prune -f
