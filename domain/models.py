@@ -14,9 +14,15 @@ class User(BaseModel):
     email: str
     hashed_password: str
 
+    class Config:
+        from_attributes = True
+
 class ChatMessage(BaseModel):
     id: int
     role: str
     message: str
     user_id: int
     created_at: str
+
+    class Config:
+        from_attributes = True
