@@ -33,8 +33,7 @@ jobs:
             cd ~/AgentOps/
             echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > .env
             chmod 600 .env
-            docker compose down
-            docker compose up -d --build
+            docker compose up agent_service_container -d --build --force-recreate
             docker image prune -f
             docker buildx prune -f
             echo "Deployment completed successfully!"

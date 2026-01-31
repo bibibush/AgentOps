@@ -2,7 +2,7 @@ from typing import Protocol, TypeVar, List, Optional
 
 T = TypeVar('T')
 
-class PostgresDBPort(Protocol[T]):
+class MyDBPort(Protocol[T]):
 
     def add(self, entity: T) -> T:
         """새 엔티티 추가"""

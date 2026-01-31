@@ -8,3 +8,16 @@ services:
     restart: always
     environment:
       OPENAI_API_KEY: "${OPENAI_API_KEY}"
+
+  mydb:
+    image: mysql:8.0
+    container_name: mydb_container
+    environment:
+      MYSQL_ROOT_PASSWORD: "your_root_password"
+      MYSQL_DATABASE: "your_database"
+      MYSQL_USER: "your_user"
+      MYSQL_PASSWORD: "your_password"
+      TZ: "Asia/Seoul"
+    ports:
+      - "3306:3306"
+    restart: always
