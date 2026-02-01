@@ -5,7 +5,7 @@ from sqlalchemy.sql import func
 from infrastructure.db.base import Base
 
 
-class User(Base):
+class UserORM(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -13,10 +13,10 @@ class User(Base):
     email = Column(String(255), unique=True, nullable=False, index=True)
     hashed_password = Column(String(255), nullable=False)
 
-    messages = relationship("ChatMessage", back_populates="user")
+    messages = relationship("ChatMessageORM", back_populates="user")
 
 
-class ChatMessage(Base):
+class ChatMessageORM(Base):
     __tablename__ = "chat_messages"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -25,4 +25,4 @@ class ChatMessage(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
-    user = relationship("User", back_populates="messages")
+    user = relationship("UserORM", back_populates="messages")
