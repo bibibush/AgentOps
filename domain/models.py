@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, Optional
 
 T = TypeVar('T')
 
@@ -17,11 +17,21 @@ class User(BaseModel):
     class Config:
         from_attributes = True
 
+class Session(BaseModel):
+    id: int
+    user_id: int
+    title: Optional[str]
+    token: Optional[str]
+    created_at: str
+
+    class Config:
+        from_attributes = True
+
 class ChatMessage(BaseModel):
     id: int
     role: str
     message: str
-    user_id: int
+    session_id: int
     created_at: str
 
     class Config:

@@ -13,7 +13,19 @@ class UserORM(Base):
     email = Column(String(255), unique=True, nullable=False, index=True)
     hashed_password = Column(String(255), nullable=False)
 
-    messages = relationship("ChatMessageORM", back_populates="user")
+    sessions = relationship("SessionORM", back_populates="user")
+
+class SessionORM(Base):
+    __tablename__ = "sessions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    title = Column(String(255), nullable=True)
+    token = Column(String(255), nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+
+    user = relationship("UserORM", back_populates="sessions")
+    messages = relationship("ChatMessageORM", back_populates="session")
 
 
 class ChatMessageORM(Base):
@@ -22,7 +34,7 @@ class ChatMessageORM(Base):
     id = Column(Integer, primary_key=True, index=True)
     role = Column(String(50), nullable=False)
     message = Column(Text, nullable=False)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
-    user = relationship("UserORM", back_populates="messages")
+    session = relationship("SessionORM", back_populates="messages")

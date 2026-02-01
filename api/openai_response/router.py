@@ -35,9 +35,17 @@ async def get_openai_response_json(data: OpenAIResponseAPIModel):
 @router.post("/sse")
 async def get_openai_response_sse(data: OpenAIResponseAPIModel):
     openai_usecase = OpenAIUseCase()
+    if data.session_id is None:
+        session_id = await openai_usecase.create_session_id(data)
+    else:
+        session_id = data.session_id
 
     async def event_generator():
-        async for chunk in openai_usecase.generate_stream_response(ai_request=data):
+        yield f"event: session\ndata: {session_id}\n\n"
+        async for chunk in openai_usecase.generate_stream_response(
+            ai_request=data,
+            session_id=session_id,
+        ):
             yield f"data: {chunk}\n\n"
 
     return StreamingResponse(
