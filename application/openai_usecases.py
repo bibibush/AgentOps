@@ -11,6 +11,7 @@ class OpenAIUseCase:
     user_repository: MyDBPort[UserORM]
     chat_repository: MyDBPort[ChatMessageORM]
     session_repository: MyDBPort[SessionORM]
+    
     def __init__(self):
         self.openai_repository = OpenAIResponseAPIRepository()
         self.user_repository = MyDBRepository(entity_class=UserORM)

@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 from domain.models import ResponseAPI
 from domain.openai_response.models import OpenAIResponseAPIModel
+from domain.parser import format_sse_data
 from application.openai_usecases import OpenAIUseCase
 
 router = APIRouter(prefix="/openai-response")
@@ -46,7 +47,7 @@ async def get_openai_response_sse(data: OpenAIResponseAPIModel):
             ai_request=data,
             session_id=session_id,
         ):
-            yield f"data: {chunk}\n\n"
+            yield format_sse_data(chunk)
 
     return StreamingResponse(
         event_generator(),
