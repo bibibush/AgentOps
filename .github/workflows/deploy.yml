@@ -40,7 +40,7 @@ jobs:
             MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
             EOF
             chmod 600 .env
-            docker compose up agent_service_container -d --build --force-recreate
+            docker compose up -d --build --force-recreate
             docker image prune -f
             docker buildx prune -f
             echo "Deployment completed successfully!"
