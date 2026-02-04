@@ -12,7 +12,12 @@ from infrastructure.db.base import Base
 config = context.config
 
 # Override sqlalchemy.url with environment variable if it exists
-database_url = os.getenv("DEV_DATABASE_URL")
+is_dev = os.getenv("ENV") == "development"
+if is_dev:
+    database_url = os.getenv("DEV_DATABASE_URL")
+else:
+    database_url = os.getenv("DATABASE_URL")
+
 if database_url:
     config.set_main_option("sqlalchemy.url", database_url)
 

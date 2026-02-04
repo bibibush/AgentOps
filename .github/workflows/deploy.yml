@@ -32,6 +32,7 @@ jobs:
           script: |
             cd ~/AgentOps/
             cat << EOF > .env
+            ENV="production"
             OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}
@@ -40,7 +41,9 @@ jobs:
             MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
             EOF
             chmod 600 .env
-            docker compose up -d --build --force-recreate
+            docker compose up mydb -d
+            docker compose up agent_service -d --build --force-recreate
+            docker container prune -f
             docker image prune -f
             docker buildx prune -f
             echo "Deployment completed successfully!"
