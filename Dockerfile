@@ -10,4 +10,4 @@ RUN pip install --no-cache-dir uv
 RUN uv pip install -r pyproject.toml --system --no-cache
 
 EXPOSE 8000
-CMD ["python", "main.py"]
+CMD ["sh", "-c", "alembic upgrade head && python main.py"]

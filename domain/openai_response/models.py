@@ -14,6 +14,7 @@ class OpenAIToolsModel(BaseModel):
     parameters: Optional[OpenAIToolsParametersModel] = None
 
 class OpenAIResponseAPIModel(BaseModel):
+    session_id: Optional[int] = None
     model: str
     input: Union[List[Dict], str]
     instructions: Optional[str] = system_prompt
