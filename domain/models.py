@@ -12,8 +12,6 @@ class User(BaseModel):
     id: int
     username: str
     email: str
-    hashed_password: str
-
 
 class Session(BaseModel):
     id: int

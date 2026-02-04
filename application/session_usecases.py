@@ -21,14 +21,13 @@ class SessionUsecase:
         return user
     
     async def create_admin_user(self):
-        new_user = User(
+        new_user = UserORM(
             id=1,
             username="admin",
             email="admin@admin.com",
             hashed_password="admin1234!@#$"
         )
-        new_user_orm = UserORM(**new_user.model_dump())
-        await self.user_repository.add(new_user_orm)
+        await self.user_repository.add(new_user)
         await self.user_repository.commit()
 
         return "admin계정 생성 완료"
