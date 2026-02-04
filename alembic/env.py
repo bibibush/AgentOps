@@ -19,6 +19,8 @@ else:
     database_url = os.getenv("DATABASE_URL")
 
 if database_url:
+    # Alembic 실행 시에만 URL을 동기 드라이버로 변환
+    database_url = database_url.replace("+aiomysql", "+pymysql")
     config.set_main_option("sqlalchemy.url", database_url)
 
 # Interpret the config file for Python logging.
