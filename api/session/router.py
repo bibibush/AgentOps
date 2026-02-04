@@ -9,7 +9,7 @@ router = APIRouter()
 async def get_sessions(user_id: int):
     session_usecase = SessionUsecase()
     sessions = await session_usecase.get_sessions_by_user(user_id)
-    sessions = [Session.model_validate(session) for session in sessions]
+    sessions = [Session.model_validate(session, from_attributes=True) for session in sessions]
 
     return ResponseAPI(
         status_code=200,
@@ -21,7 +21,7 @@ async def get_sessions(user_id: int):
 async def get_user():
     session_usecase = SessionUsecase()
     user = await session_usecase.get_user()
-    user = User.model_validate(user)
+    user = User.model_validate(user, from_attributes=True)
 
     return ResponseAPI(
         status_code=200,

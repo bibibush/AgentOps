@@ -14,8 +14,6 @@ class User(BaseModel):
     email: str
     hashed_password: str
 
-    class Config:
-        from_attributes = True
 
 class Session(BaseModel):
     id: int
@@ -24,8 +22,6 @@ class Session(BaseModel):
     token: Optional[str]
     created_at: str
 
-    class Config:
-        from_attributes = True
 
 class ChatMessage(BaseModel):
     id: int
@@ -33,6 +29,3 @@ class ChatMessage(BaseModel):
     message: str
     session_id: int
     created_at: str
-
-    class Config:
-        from_attributes = True
