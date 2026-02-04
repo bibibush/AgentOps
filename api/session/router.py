@@ -28,3 +28,13 @@ async def get_user():
         message="유저 조회 성공",
         data=user
     )
+
+@router.post("/user/admin", response_model=ResponseAPI)
+async def create_admin_user():
+    session_usecase = SessionUsecase()
+    success_message = await session_usecase.create_admin_user()
+
+    return ResponseAPI(
+        status_code=201,
+        message=success_message,
+    )
