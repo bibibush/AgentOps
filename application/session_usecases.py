@@ -29,5 +29,6 @@ class SessionUsecase:
         )
         new_user_orm = UserORM(**new_user.model_dump())
         await self.user_repository.add(new_user_orm)
+        await self.user_repository.commit()
 
         return "admin계정 생성 완료"
