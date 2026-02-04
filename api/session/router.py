@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from typing import List
+from typing import List, Optional
 from domain.models import ResponseAPI, Session, User
 from application.session_usecases import SessionUsecase
 
@@ -17,7 +17,7 @@ async def get_sessions(user_id: int):
         data=sessions
     )
 
-@router.get("/user", response_model=ResponseAPI[User])
+@router.get("/user", response_model=ResponseAPI[Optional[User]])
 async def get_user():
     session_usecase = SessionUsecase()
     user = await session_usecase.get_user()
