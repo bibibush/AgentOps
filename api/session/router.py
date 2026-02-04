@@ -21,7 +21,8 @@ async def get_sessions(user_id: int):
 async def get_user():
     session_usecase = SessionUsecase()
     user = await session_usecase.get_user()
-    user = User.model_validate(user, from_attributes=True)
+    if user:
+        user = User.model_validate(user, from_attributes=True)
 
     return ResponseAPI(
         status_code=200,
