@@ -57,6 +57,7 @@ class OpenAIUseCase:
         await self.chat_repository.commit()
         
         request_data = ai_request.model_dump()
+        request_data.pop("session_id", None)
         response = await self.openai_repository.create_response(**request_data)
         async for chunk in self.openai_repository.output_response_stream(response):
             chat.append(chunk)
