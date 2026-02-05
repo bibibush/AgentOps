@@ -34,7 +34,7 @@ class ChatMessageORM(Base):
     id = Column(Integer, primary_key=True, index=True)
     role = Column(String(50), nullable=False)
     message = Column(Text, nullable=False)
-    session_id = Column(Integer, ForeignKey("sessions.id"), nullable=False, index=True)
+    session_id = Column(Integer, ForeignKey("sessions.id", ondelete="CASCADE"), nullable=False, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     session = relationship("SessionORM", back_populates="messages")
