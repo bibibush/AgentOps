@@ -21,6 +21,7 @@ class Session(BaseModel):
     user_id: int
     title: Optional[str]
     token: Optional[str]
+    messages: list['ChatMessage'] = []
     created_at: datetime
 
 
