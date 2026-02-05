@@ -48,12 +48,11 @@ class OpenAIUseCase:
         chat = []
         
         user_message = ai_request.input if isinstance(ai_request.input, str) else ""
-        user_message = ChatMessage(
+        user_message_entity = ChatMessageORM(
             session_id=session_id,
             role="user",
             message=user_message,
         )
-        user_message_entity = ChatMessageORM(**user_message.model_dump())
         await self.chat_repository.add(user_message_entity)
         await self.chat_repository.commit()
         
@@ -64,12 +63,11 @@ class OpenAIUseCase:
             yield chunk
 
         entire_chat_message = ''.join(chat)
-        chat_message = ChatMessage(
+        chat_message_entity = ChatMessageORM(
             role="assistant",
             message=entire_chat_message,
             session_id=session_id,
         )
-        chat_message_entity = ChatMessageORM(**chat_message.model_dump())
         
         await self.chat_repository.add(chat_message_entity)
         await self.chat_repository.commit()
