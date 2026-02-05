@@ -18,15 +18,6 @@ class OpenAIUseCase:
         self.chat_repository = MyDBRepository(entity_class=ChatMessageORM)
         self.session_repository = MyDBRepository(entity_class=SessionORM)
 
-    async def create_session_id(self, ai_request: OpenAIResponseAPIModel) -> int:
-        new_session = Session(
-            user_id=1,
-            title=ai_request.input[:20] if isinstance(ai_request.input, str) else "New Session",
-        )
-        session_entity = SessionORM(**new_session.model_dump())
-        await self.session_repository.add(session_entity)
-        await self.session_repository.commit()
-        return session_entity.id
     async def generate_text_response(
             self,
             ai_request: OpenAIResponseAPIModel,

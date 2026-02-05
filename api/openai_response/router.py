@@ -4,6 +4,7 @@ from domain.models import ResponseAPI
 from domain.openai_response.models import OpenAIResponseAPIModel
 from domain.parser import format_sse_data
 from application.openai_usecases import OpenAIUseCase
+from application.session_usecases import SessionUsecase
 
 router = APIRouter(prefix="/openai-response")
 
@@ -36,8 +37,9 @@ async def get_openai_response_json(data: OpenAIResponseAPIModel):
 @router.post("/sse")
 async def get_openai_response_sse(data: OpenAIResponseAPIModel):
     openai_usecase = OpenAIUseCase()
+    session_usecase = SessionUsecase()
     if data.session_id is None:
-        session_id = await openai_usecase.create_session_id(data)
+        session_id = await session_usecase.create_session_id(data)
     else:
         session_id = data.session_id
 

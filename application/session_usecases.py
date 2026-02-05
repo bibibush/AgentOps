@@ -1,5 +1,5 @@
 from domain.ports import MyDBPort
-from domain.models import User
+from domain.openai_response.models import OpenAIResponseAPIModel
 from infrastructure.db.models import UserORM, ChatMessageORM, SessionORM
 from infrastructure.mydb_repository import MyDBRepository
 
@@ -11,6 +11,15 @@ class SessionUsecase:
         self.user_repository = MyDBRepository(entity_class=UserORM)
         self.chat_repository = MyDBRepository(entity_class=ChatMessageORM)
         self.session_repository = MyDBRepository(entity_class=SessionORM)
+    
+    async def create_session_id(self, ai_request: OpenAIResponseAPIModel) -> int:
+        new_session = SessionORM(
+            user_id=1,
+            title=ai_request.input[:20] if isinstance(ai_request.input, str) else "New Session",
+        )
+        await self.session_repository.add(new_session)
+        await self.session_repository.commit()
+        return new_session.id
     
     async def get_sessions_by_user(self, user_id: int):
         sessions = await self.session_repository.filter_by(user_id=user_id)
