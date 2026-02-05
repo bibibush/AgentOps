@@ -20,6 +20,19 @@ async def get_sessions(user_id: int):
     finally:
         await session_usecase.cleanup()
 
+@router.delete("/sessions/{session_id}", response_model=ResponseAPI)
+async def delete_session(session_id: int):
+    session_usecase = SessionUsecase()
+    try:
+        success_message = await session_usecase.delete_session(session_id)
+
+        return ResponseAPI(
+            status_code=200,
+            message=success_message,
+        )
+    finally:
+        await session_usecase.cleanup()
+
 @router.get("/user", response_model=ResponseAPI[Optional[User]])
 async def get_user():
     session_usecase = SessionUsecase()

@@ -29,6 +29,15 @@ class SessionUsecase:
         await self.session_repository.commit()
         return session_id
     
+    async def delete_session(self, session_id: int) -> str:
+        session = await self.session_repository.get_by_id(session_id)
+        if not session:
+            raise Exception("세션을 찾을 수 없습니다")
+        
+        await self.session_repository.delete(session)
+        await self.session_repository.commit()
+        return "세션 삭제 완료"
+    
     async def get_sessions_by_user(self, user_id: int):
         sessions = await self.session_repository.filter_by(user_id=user_id)
         return sessions
