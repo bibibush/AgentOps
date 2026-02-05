@@ -5,7 +5,7 @@ from application.session_usecases import SessionUsecase
 
 router = APIRouter()
 
-@router.get("/session/{user_id}", response_model=ResponseAPI[List[Session]])
+@router.get("/sessions/{user_id}", response_model=ResponseAPI[List[Session]])
 async def get_sessions(user_id: int):
     session_usecase = SessionUsecase()
     sessions = await session_usecase.get_sessions_by_user(user_id)
