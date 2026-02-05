@@ -13,7 +13,7 @@ class UserORM(Base):
     email = Column(String(255), unique=True, nullable=False, index=True)
     hashed_password = Column(String(255), nullable=False)
 
-    sessions = relationship("SessionORM", back_populates="user")
+    sessions = relationship("SessionORM", back_populates="user", lazy="selectin")
 
 class SessionORM(Base):
     __tablename__ = "sessions"
@@ -25,7 +25,7 @@ class SessionORM(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     user = relationship("UserORM", back_populates="sessions")
-    messages = relationship("ChatMessageORM", back_populates="session")
+    messages = relationship("ChatMessageORM", back_populates="session", lazy="selectin")
 
 
 class ChatMessageORM(Base):
