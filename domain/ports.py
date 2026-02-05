@@ -35,3 +35,7 @@ class MyDBPort(Protocol[T]):
     async def rollback(self) -> None:
         """트랜잭션 롤백"""
         ...
+    
+    async def close(self) -> None:
+        """세션 닫기"""
+        ...
