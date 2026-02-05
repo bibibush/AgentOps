@@ -48,3 +48,7 @@ class MyDBRepository(MyDBPort[T], Generic[T]):
 
     async def rollback(self) -> None:
         await self.session.rollback()
+
+    async def close(self) -> None:
+        """세션을 명시적으로 닫습니다."""
+        await self.session.close()

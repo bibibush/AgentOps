@@ -11,12 +11,18 @@ class OpenAIUseCase:
     user_repository: MyDBPort[UserORM]
     chat_repository: MyDBPort[ChatMessageORM]
     session_repository: MyDBPort[SessionORM]
-    
+
     def __init__(self):
         self.openai_repository = OpenAIResponseAPIRepository()
         self.user_repository = MyDBRepository(entity_class=UserORM)
         self.chat_repository = MyDBRepository(entity_class=ChatMessageORM)
         self.session_repository = MyDBRepository(entity_class=SessionORM)
+
+    async def cleanup(self):
+        """모든 repository의 세션을 닫습니다."""
+        await self.user_repository.close()
+        await self.chat_repository.close()
+        await self.session_repository.close()
 
     async def generate_text_response(
             self,

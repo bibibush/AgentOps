@@ -11,6 +11,12 @@ class SessionUsecase:
         self.user_repository = MyDBRepository(entity_class=UserORM)
         self.chat_repository = MyDBRepository(entity_class=ChatMessageORM)
         self.session_repository = MyDBRepository(entity_class=SessionORM)
+
+    async def cleanup(self):
+        """모든 repository의 세션을 닫습니다."""
+        await self.user_repository.close()
+        await self.chat_repository.close()
+        await self.session_repository.close()
     
     async def create_session_id(self, ai_request: OpenAIResponseAPIModel) -> int:
         new_session = SessionORM(
@@ -18,8 +24,10 @@ class SessionUsecase:
             title=ai_request.input[:20] if isinstance(ai_request.input, str) else "New Session",
         )
         await self.session_repository.add(new_session)
+        # flush()를 호출하면 id가 할당되고, commit 전이므로 객체가 여전히 세션에 연결되어 있습니다
+        session_id = new_session.id
         await self.session_repository.commit()
-        return new_session.id
+        return session_id
     
     async def get_sessions_by_user(self, user_id: int):
         sessions = await self.session_repository.filter_by(user_id=user_id)
