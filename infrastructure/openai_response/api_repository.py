@@ -1,4 +1,5 @@
 from domain.openai_response.ports import OpenAIResponseAPIPort
+from domain.openai_response.prompt import architecture_prompt
 from openai import AsyncOpenAI
 from typing import Any, AsyncGenerator, Union, List, Dict
 import logging
@@ -11,13 +12,14 @@ class OpenAIResponseAPIRepository(OpenAIResponseAPIPort):
         self.client = AsyncOpenAI()
         self.stream = False
 
-    async def create_response(self, model: str, input: Any, stream: bool, **kwargs) -> Any:
+    async def create_response(self, model: str, input: Any, stream: bool, mode: str = "frontend", **kwargs) -> Any:
         self.stream = stream if stream is not None else False
         
         response = await self.client.responses.create(
             model=model,
             input=input,
             stream=stream,
+            instructions=architecture_prompt if mode == "architecture" else kwargs.get("instructions", ""),
             **kwargs
         )
 
