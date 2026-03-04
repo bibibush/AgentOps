@@ -22,7 +22,7 @@ class OpenAIResponseAPIRepository(OpenAIResponseAPIPort):
             model=model,
             input=input,
             stream=stream,
-            instructions=architecture_prompt if mode == "architecture" else kwargs.get("instructions", ""),
+            instructions=architecture_prompt if mode == "architecture" else kwargs.pop("instructions", None),
             **kwargs
         )
 
