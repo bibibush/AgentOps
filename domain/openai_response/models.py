@@ -15,7 +15,7 @@ class OpenAIToolsModel(BaseModel):
 
 class OpenAIResponseAPIModel(BaseModel):
     session_id: Optional[int] = None
-    mode: Literal["architecture", "frontend"] = "frontend"
+    mode: Literal["architecture", "frontend"] = "architecture"
     model: str
     input: Union[List[Dict], str]
     instructions: Optional[str] = system_prompt
