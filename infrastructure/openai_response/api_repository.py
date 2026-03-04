@@ -12,7 +12,7 @@ class OpenAIResponseAPIRepository(OpenAIResponseAPIPort):
         self.client = AsyncOpenAI()
         self.stream = False
 
-    async def create_response(self, model: str, input: Any, stream: bool, mode: str = "frontend", **kwargs) -> Any:
+    async def create_response(self, model: str, input: Any, stream: bool, mode: str, **kwargs) -> Any:
         self.stream = stream if stream is not None else False
         if mode == "architecture":
             kwargs.pop("instructions", None)  # Ensure instructions are not passed from kwargs for architecture mode

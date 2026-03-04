@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Dict, Union, Optional, Any
+from typing import List, Dict, Union, Optional, Any, Literal
 from domain.openai_response.prompt import system_prompt
 
 class OpenAIToolsParametersModel(BaseModel):
@@ -15,6 +15,7 @@ class OpenAIToolsModel(BaseModel):
 
 class OpenAIResponseAPIModel(BaseModel):
     session_id: Optional[int] = None
+    mode: Literal["architecture", "frontend"] = "frontend"
     model: str
     input: Union[List[Dict], str]
     instructions: Optional[str] = system_prompt
