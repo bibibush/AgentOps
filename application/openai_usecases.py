@@ -1,36 +1,10 @@
-from typing import Any
-
 from domain.ports import MyDBPort
+from domain.models import ChatMessage, Session
 from domain.openai_response.ports import OpenAIResponseAPIPort
 from domain.openai_response.models import OpenAIResponseAPIModel
 from infrastructure.openai_response.api_repository import OpenAIResponseAPIRepository
 from infrastructure.mydb_repository import MyDBRepository
 from infrastructure.db.models import UserORM, ChatMessageORM, SessionORM
-
-
-def _extract_user_text(input_data: Any) -> str:
-    if isinstance(input_data, str):
-        return input_data
-
-    if isinstance(input_data, list):
-        for message in input_data:
-            if not isinstance(message, dict):
-                continue
-
-            content = message.get("content")
-            if not isinstance(content, list):
-                continue
-
-            for item in content:
-                if not isinstance(item, dict):
-                    continue
-                if item.get("type") == "input_text":
-                    text = item.get("text")
-                    if isinstance(text, str):
-                        return text
-
-    return ""
-
 
 class OpenAIUseCase:
     openai_repository: OpenAIResponseAPIPort
@@ -73,7 +47,7 @@ class OpenAIUseCase:
         ):
         chat = []
         
-        user_message = _extract_user_text(ai_request.input)
+        user_message = ai_request.input if isinstance(ai_request.input, str) else ""
         user_message_entity = ChatMessageORM(
             session_id=session_id,
             role="user",
