@@ -1,7 +1,34 @@
+from typing import Any
+
 from domain.ports import MyDBPort
 from domain.openai_response.models import OpenAIResponseAPIModel
 from infrastructure.db.models import UserORM, ChatMessageORM, SessionORM
 from infrastructure.mydb_repository import MyDBRepository
+
+
+def _extract_user_text(input_data: Any) -> str:
+    if isinstance(input_data, str):
+        return input_data
+
+    if isinstance(input_data, list):
+        for message in input_data:
+            if not isinstance(message, dict):
+                continue
+
+            content = message.get("content")
+            if not isinstance(content, list):
+                continue
+
+            for item in content:
+                if not isinstance(item, dict):
+                    continue
+                if item.get("type") == "input_text":
+                    text = item.get("text")
+                    if isinstance(text, str):
+                        return text
+
+    return ""
+
 
 class SessionUsecase:
     user_repository: MyDBPort[UserORM]
@@ -19,9 +46,10 @@ class SessionUsecase:
         await self.session_repository.close()
     
     async def create_session_id(self, ai_request: OpenAIResponseAPIModel) -> int:
+        user_text = _extract_user_text(ai_request.input)
         new_session = SessionORM(
             user_id=1,
-            title=ai_request.input[:20] if isinstance(ai_request.input, str) else "New Session",
+            title=user_text[:20] if user_text else "New Session",
         )
         await self.session_repository.add(new_session)
         # flush()를 호출하면 id가 할당되고, commit 전이므로 객체가 여전히 세션에 연결되어 있습니다
