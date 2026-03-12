@@ -8,7 +8,9 @@
 >
 > 클린 아키텍처를 적용해 비즈니스 로직, 외부 연동 로직, 실제 작업 로직, API 라우트 정의를 분리했고, 확장과 유지보수가 쉬운 구조를 목표로 했습니다.
 >
-> 배포는 docker 기반으로 컨테이너화하고, ec2 + cloudFront 환경에 GitHub Actions CI/CD로 자동 배포되도록 구성했습니다.
+> ~~배포는 docker 기반으로 컨테이너화하고, ec2 + cloudFront 환경에 GitHub Actions CI/CD로 자동 배포되도록 구성했습니다.~~
+>
+> 배포는 docker 기반으로 컨테이너화하고, ec2 + nginx 환경에 GitHub Actions CI/CD로 자동 배포되도록 구성했습니다.
 
 ## 사용 기술
 
@@ -20,7 +22,7 @@
 - uv
 - docker
 - ec2
-- cloudFront
+- nginx
 
 ## 프로젝트 구조 (클린 아키텍처)
 
@@ -321,6 +323,21 @@ async def get_openai_response_sse(data: OpenAIResponseAPIModel):
 ```
 
 </details>
+
+## 프로젝트 진행 중 어려웠던 점
+
+### CloudFront Reverse Proxy 환경에서 이미지 업로드 413 오류 발생
+
+- 초기에는 CloudFront를 reverse proxy로 두고 서비스를 운영했습니다.
+- 이미지 업로드 기능을 구현하는 과정에서 업로드 용량 문제로 CloudFront 단계에서 `413 Request Entity Too Large` 오류가 발생했습니다.
+- 다만 프론트엔드 브라우저에서는 해당 문제가 명확하게 드러나지 않고 `403` 오류처럼 보였기 때문에, 원인 파악에 시간이 걸렸습니다.
+- AWS 프리티어 환경을 사용하고 있어 CloudFront 로그를 충분히 확인하기 어려웠고, 이 과정에서 AI에 질의하며 원인을 좁혀 나갔습니다.
+- 최종적으로 CloudFront를 제거하고, EC2 환경에서 Nginx를 reverse proxy로 직접 구성하는 방식으로 전환해 문제를 해결했습니다.
+
+### 대응 과정에서 얻은 교훈
+
+- 브라우저에서 보이는 상태 코드와 실제 프록시 계층에서 발생한 오류가 다를 수 있어, 인프라 계층별로 문제를 분리해서 보는 접근이 중요했습니다.
+- 파일 업로드처럼 요청 본문 크기에 민감한 기능은 초기 배포 구조를 설계할 때부터 프록시 제한과 운영 가시성을 함께 고려해야 한다는 점을 확인했습니다.
 
 ## 개선 사항
 
