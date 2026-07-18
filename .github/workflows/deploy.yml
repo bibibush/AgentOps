@@ -41,7 +41,13 @@ jobs:
             MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}
             EOF
             chmod 600 .env
-            cat <<'EOF' > nginx.conf
+
+            # 여러 애플리케이션이 공용으로 사용하는 nginx 설정 디렉토리/네트워크
+            mkdir -p ~/nginx/conf.d
+            docker network inspect proxy_net >/dev/null 2>&1 || docker network create proxy_net
+
+            # 이 애플리케이션 전용 server 블록만 공용 conf.d 디렉토리에 배치
+            cat <<'EOF' > ~/nginx/conf.d/agentops.conf
             server {
               listen 8080 ssl;
               server_name api.agentops.p-e.kr;
@@ -65,7 +71,10 @@ jobs:
             EOF
             docker compose up mydb -d
             docker compose up agent_service -d --build --force-recreate
-            docker compose up nginx -d --force-recreate
+            docker compose up nginx -d
+            # 이미 떠 있는 공용 nginx는 재시작 대신 설정만 무중단 reload
+            docker exec nginx_container nginx -t \
+              && docker exec nginx_container nginx -s reload
             docker container prune -f
             docker image prune -f
             docker buildx prune -f
